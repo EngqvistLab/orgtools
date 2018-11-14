@@ -27,7 +27,7 @@ The library should now be available for loading in all your python scripts.
 The org_tax module is used to interconvert organism names and taxonomic identifiers. It is also used to find the full taxonomic lineage of organisms as well as computing taxonomic distance between organisms.
 
 ### The data
-If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. After unzipping the zipfile is removed from the system. The downloading and unzipping of the file will take some time the first time the script is run.
+If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. This file is about 60 MB in size. After unzipping the zipfile is removed from the system. The downloading and unzipping of the file will take some time the first time the script is run.
 
 ### Running the code
 **get_taxid()** takes a list of organism names as input and returns a dictionary with organism name keys and taxonomic identifier values.
@@ -83,7 +83,6 @@ If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. 
 >>> lineage_object.lineages()
 {'Escherichia coli': {'nodes': ['1', '131567', '2', '1224', '1236', '91347', '543', '561', '562'], 'ranks': ['root', 'no rank', 'superkingdom', 'phylum', 'class', 'order', 'family', 'genus', 'species'], 'names': ['root', 'cellular organisms', 'Bacteria', 'Proteobacteria', 'Gammaproteobacteria', 'Enterobacterales', 'Enterobacteriaceae', 'Escherichia', 'Escherichia coli']}, 'Saccharomyces cerevisiae': {'nodes': ['1', '131567', '2759', '33154', '4751', '451864', '4890', '716545', '147537', '4891', '4892', '4893', '4930', '4932'], 'ranks': ['root', 'no rank', 'superkingdom', 'no rank', 'kingdom', 'subkingdom', 'phylum', 'no rank', 'subphylum', 'class', 'order', 'family', 'genus', 'species'], 'names': ['root', 'cellular organisms', 'Eukaryota', 'Opisthokonta', 'Fungi', 'Dikarya', 'Ascomycota', 'saccharomyceta', 'Saccharomycotina', 'Saccharomycetes', 'Saccharomycetales', 'Saccharomycetaceae', 'Saccharomyces', 'Saccharomyces cerevisiae']}}
 ```
-
 
 **identifiers()** is a lineage object method that returns a set of all the input identifiers used.
 
@@ -165,7 +164,7 @@ If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. 
 The uid_tax module makes interconversions between UniProt identifiers and taxonomic identifiers. Can be used to find which organism (taxid) a specific protein comes from, or, alternatively, which UniProt identifiers are associated with a specific organism (taxid).
 
 ### The data
-If not present in the correct folder this script will automatically download a UniProt flatfile (idmapping.dat.2015_03.gz) that is needed for the conversion. This file is then automatically filtered to create a smaller file that is used for the lookup. The first time the script is run will take some time (~10 minutes) to produce the filtered file. Subsequent runs are much faster.
+If not present this script will automatically downloads a UniProt flatfile (idmapping.dat.2015_03.gz) that is needed for the conversion. The file is about 6 GB in size. This file is then automatically filtered to create a smaller file that is used for the lookup. The first time the script is run will take a long time (~60 to 120 minutes) to download the zipped file and produce the filtered file. Subsequent runs make use of the filtered data and are fast.
 
 ### Running the code
 **get_uid()** takes a list of taxonomic identifiers as input and returns a dictionary with taxonomic identifier keys and a list of uniprot identifier values.
@@ -195,7 +194,7 @@ This is currently pretty slow to run ~10 seconds. Consider a seqlite database so
 This module is used to get pfam domain information for uniprot identifiers.
 
 ### The data
-I have not been able to identify a suitable flatfile. Instead this script makes use of the UniProt uploadlists.
+I have not been able to identify a suitable flatfile. Instead this script makes use of the UniProt uploadlists API.
 https://www.uniprot.org/help/uploadlists
 
 ### Running the code
@@ -221,7 +220,7 @@ A data flatfile is distributed with this package.
 >>> from orgtools import org_ph
 >>> out_dict = org_ph.get_ph(['Saccharomyces cerevisiae', 'Escherichia coli'])
 >>> out_dict
-{'Escherichia coli': '7.01', 'Saccharomyces cerevisiae': '6.5'}
+{'Escherichia coli': 7.01, 'Saccharomyces cerevisiae': 6.5}
 ```
 
 
@@ -237,5 +236,5 @@ A data flatfile is distributed with this package.
 >>> from orgtools import org_temp
 >>> out_dict = org_temp.get_temp(['Saccharomyces cerevisiae', 'Escherichia coli'])
 >>> out_dict
-{'Escherichia coli': '36', 'Saccharomyces cerevisiae': '28'}
+{'Escherichia coli': 36, 'Saccharomyces cerevisiae': 28}
 ```
