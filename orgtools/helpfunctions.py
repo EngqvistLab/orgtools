@@ -21,9 +21,9 @@ def _normalize_name(organism):
     Ignore strain designations.
     Should be: "Escherichia coli"
     '''
-    assert type(organism) is str, 'Error, the organism names must be supplied as strings. The iput "%s" is not.' % organism
+    assert type(organism) is str, 'Error, the organism names must be supplied as strings. The input "%s" is not.' % organism
 
-    # deal wiht organism names separated by _
+    # deal with organism names separated by _
     if len(organism.split()) < len(organism.split('_')):
         organism = ' '.join(organism.split('_'))
 

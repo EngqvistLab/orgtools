@@ -303,12 +303,12 @@ class Lineage(object):
 			identifier = helpfunctions._normalize_name(identifier)
 			lineage = self.organism_lineage_data.get(identifier)
 			if lineage is None:
-				raise ValueError
+				return None
 
 		else:
 			lineage = self.taxid_lineage_data.get(identifier)
 			if lineage is None:
-				raise ValueError
+				return None
 
 		return lineage
 
@@ -402,10 +402,10 @@ class Distance(object):
 		'''
 
 		if self.score_type == 'rank': # A rigid scoring system based solely on the common rank
-			SCORES = {'root':8, 'no rank':7, 'superkingdom':6, 'phylum':5, 'class':4, 'order':3, 'family':2, 'genus':1, 'species':0}
+			SCORES = {'root':7, 'superkingdom':6, 'phylum':5, 'class':4, 'order':3, 'family':2, 'genus':1, 'species':0}
 			score = SCORES[rank]
 
-		elif self.score_type == 'length': # A flexible scoring system based on the actual number of levels between two leaves
+		elif self.score_type == 'length': # A flexible scoring system based on the actual number of nodes between two leaves
 			lin1_len = len(lineage1['rank']) - lineage1['rank'].index(rank) - 1
 			lin2_len = len(lineage2['rank']) - lineage2['rank'].index(rank) - 1
 			score = (lin1_len + lin2_len)/2

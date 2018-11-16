@@ -23,6 +23,17 @@ The library should now be available for loading in all your python scripts.
 
 # How to use the orgtools library
 
+
+## topfunctions module
+The topfunctions module leverages the other modules in this package to generate output flatfiles with summarizing information for all supplied uniprot identifiers.
+
+### Running the code
+```
+>>> from orgtools import topfunctions
+>>> topfunctions.
+>>>
+```
+
 ## org_tax module
 The org_tax module is used to interconvert organism names and taxonomic identifiers. It is also used to find the full taxonomic lineage of organisms as well as computing taxonomic distance between organisms.
 
@@ -93,7 +104,7 @@ If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. 
 {'Escherichia coli', 'Saccharomyces cerevisiae'}
 ```
 
-**Distance()** is a distance class that takes a a lineage object as input and can compute taxonomic distances on these. The "score_type" variable can be specified as 'rank' or 'length' for different ways of computing the taxonomic distance, 'rank' is default.
+**Distance()** is a distance class that takes a lineage object as input and can compute taxonomic distances on these. The "score_type" variable can be specified as 'rank' or 'length' for different ways of computing the taxonomic distance, 'rank' is default.
 ```
 >>> from orgtools import org_tax
 >>> lineage_object = org_tax.Lineage('organism', ['Escherichia coli', 'Homo sapiens', 'Bacillus subtilis', 'Staphylococcus aureus'])

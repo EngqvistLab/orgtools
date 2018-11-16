@@ -81,7 +81,7 @@ def get_pfam(uid_list):
 		batch = uid_list[n:end]
 
 		# download a batch
-		print('Retrieving domain for id numbers %s to %s' % (n, end))
+		print('Retrieving domain for id numbers %s to %s ...' % (n, end))
 		page = None
 		while page is None:
 			page = _retreive_info(batch)
@@ -107,5 +107,5 @@ def get_pfam(uid_list):
 			if data.get(identifier) is None:
 				data[identifier] = set([])
 			data[identifier] = pfam_domain
-
+	print('Done')
 	return data
