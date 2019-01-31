@@ -144,7 +144,6 @@ class Properties(object):
 			if org is None:
 				org = missing_val
 
-			print(lineage)
 
 			if lineage is None:
 				nodes = missing_val
