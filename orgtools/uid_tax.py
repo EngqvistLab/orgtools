@@ -160,7 +160,7 @@ def _dlfile(url):
 			time.sleep(2)
 
 		except:
-			print('Unknown error')
+			print('Unknown error when downloading url "%s"' % url)
 			page = None
 			time.sleep(2)
 
@@ -262,7 +262,8 @@ def _retreive_info(id_list, from_db='ACC+ID', to_db='ACC'):
 		else:
 			return response.text
 	else:
-		print('Unknown error')
+		print('Unknown error when mapping identifiers at UniProt')
+		print('Error msg: ', response)
 		return None
 
 
@@ -304,8 +305,10 @@ def get_taxid(uid_list):
 	Relies on a UniProt flatfile.
 	Returns a dictionary with UniprotId keys and taxid values.
 	'''
+	out_data = {}
+
 	# chunk the data up in batches
-	group_size = 10000
+	group_size = 250
 	list_length = len(uid_list)
 	for n in range(0, list_length, group_size):
 
@@ -325,15 +328,21 @@ def get_taxid(uid_list):
 		print('Done')
 
 		# parse the result
-		out_data = _parse_page(page)
+		page_data = _parse_page(page)
+
+		# merge with output data
+		for key in page_data.keys():
+			taxid = page_data[key]
+			if taxid is not None:
+				out_data[key] = taxid
 
 		# do lookup of any missing identifiers from UniParc
-		if None in out_data.values():
+		if None in page_data.values():
 
 			# collect the offending identifiers
 			id_list = []
-			for key in out_data.keys():
-				if out_data[key] is None:
+			for key in page_data.keys():
+				if page_data[key] is None:
 					id_list.append(key)
 
 			# try to get the missing identifiers from UniParc
@@ -348,7 +357,7 @@ def get_taxid(uid_list):
 			# get the data out of the resulting page
 			temp_data = _parse_page(page)
 
-			# merge with old data
+			# merge with output data
 			for key in temp_data.keys():
 				out_data[key] = temp_data[key].split('; ')[0] # sometimes there are many entries from the same org
 

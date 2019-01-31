@@ -165,7 +165,7 @@ class Lineage(object):
 				line = lastline
 				break
 
-		return line, temporary_bit
+		return line, temporary_bit+1
 
 
 	def _get_parent_node(self, start_bit, end_bit, taxid, filehandle, lastnode = ''):
@@ -189,17 +189,25 @@ class Lineage(object):
 		# Guard against taxids that are not present, can cause the script to get stuck.
 		# Compare with the node found last iteration and if they are the same, abort.
 		if lastnode == node_id:
+			if taxid != node_id:
+				if taxid < node_id: # sometimes the answer is a few lines up, backtrack to find it
+					return self._get_parent_node(start_bit-200, end_bit, taxid, filehandle, lastnode)
 
-			# At the end of the iteration the answer is sometimes on the consecutive line, check for this first
-			line = filehandle.readline()
-			line = filehandle.readline()
-			node_id, parent_node_id, rank, *junk = line.split(b'|')
-			node_id = int(node_id.strip())
+				elif taxid > node_id:
+					# At the end of the iteration the answer is sometimes a few down, check for this
+					filehandle.seek(midpoint_bit, 0)
+					line = filehandle.readline()
 
-			if taxid == node_id:
-				pass
-			else:
-				raise ValueError # Something is wrong, each node should have a parent
+					for i in range(4):
+						node_id, parent_node_id, rank, *junk = line.split(b'|')
+						node_id = int(node_id.strip())
+						if taxid == node_id:
+							break
+						line = filehandle.readline()
+
+			if not taxid == node_id:
+				print('No lineage found for "%s"' % taxid)
+				return None, None
 		else:
 			lastnode = node_id
 
@@ -235,7 +243,7 @@ class Lineage(object):
 			parent_nodes = [taxid]
 			parent_ranks = []
 			taxid = int(taxid)
-			while taxid != 1:
+			while taxid not in [1, None]:
 
 				# check whether I have this information aldready cached, of not get from flatfile
 				parent_data = self.memoization_dict.get(taxid)

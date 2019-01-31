@@ -45,7 +45,7 @@ def _retreive_info(id_list):
 		else:
 			return response.text
 	else:
-		print('Unknown error')
+		print('Unknown error in downloading pfam domain information at "%s"' % url)
 		return None
 
 
@@ -67,10 +67,10 @@ def get_pfam(uid_list):
 	Given as set of uniprot identifiers, downloads domain information from UniProt.
 	'''
 
-	data = {k:None for k in uid_list}
+	out_data = {k:None for k in uid_list}
 
 	# chunk the data up in batches
-	group_size = 10000
+	group_size = 100
 	list_length = len(uid_list)
 	for n in range(0, list_length, group_size):
 
@@ -104,8 +104,8 @@ def get_pfam(uid_list):
 				pfam_domain = None
 
 			# add to the data structure
-			if data.get(identifier) is None:
-				data[identifier] = set([])
-			data[identifier] = pfam_domain
+			if out_data.get(identifier) is None:
+				out_data[identifier] = set([])
+			out_data[identifier] = pfam_domain
 	print('Done')
-	return data
+	return out_data

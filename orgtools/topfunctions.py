@@ -144,10 +144,23 @@ class Properties(object):
 			if org is None:
 				org = missing_val
 
+			print(lineage)
+
 			if lineage is None:
 				nodes = missing_val
 				ranks = missing_val
 				names = missing_val
+
+			elif lineage['nodes'] in ['None', None] or lineage['ranks'] is None:
+				nodes = missing_val
+				ranks = missing_val
+				names = missing_val
+
+			elif lineage['nodes'][0] == 'None' or None in lineage['ranks']:
+				nodes = missing_val
+				ranks = missing_val
+				names = missing_val
+
 			else:
 				nodes = ', '.join(lineage['nodes'])
 				ranks = ', '.join(lineage['ranks'])
