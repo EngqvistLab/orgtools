@@ -25,13 +25,15 @@ The library should now be available for loading in all your python scripts.
 
 
 ## topfunctions module
-The topfunctions module leverages the other modules in this package to generate output flatfiles with summarizing information for all supplied uniprot identifiers.
+The topfunctions module leverages the other modules in this package to generate output flatfiles with summarizing information for all supplied uniprot identifiers. This is by far the most convenient way of getting an assorment of information on uniprot identifiers.
 
 ### Running the code
+The Properties object in topfunctions takes a list of uniprot identifiers as an input. The resulting data can be saved by using the flatfile() method of the object. This method takes the output file filepath as an input.
+
 ```
 >>> from orgtools import topfunctions
->>> topfunctions.
->>>
+>>> properties_object = topfunctions.Properties(identifier_data)
+>>> properties_object.flatfile(filepath)
 ```
 
 ## org_tax module
