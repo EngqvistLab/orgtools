@@ -44,5 +44,24 @@ def get_ph(organism_list):
 	return out_data
 
 
+def data():
+	'''
+	Get a dictionary with organism keys and pH values
+	'''
+	# open data file
+	out_data = {}
+	with resource_stream(__name__, 'data/ph_data/organism_ph.tsv') as f:
+		f.readline() # skip the header
+
+		for line in f:
+			org_name, ph = line.decode('utf-8').strip().split('\t')
+
+			if out_data.get(org_name) is not None:
+				print('organism occurs twice in organism_ph.tsv file')
+				raise ValueError
+			out_data[org_name] = ph
+
+	return out_data
+
 # TODO
 # Guess ph by looking at organisms close in taxonomy

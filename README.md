@@ -236,6 +236,11 @@ A data flatfile is distributed with this package.
 {'Escherichia coli': 7.01, 'Saccharomyces cerevisiae': 6.5}
 ```
 
+**data()** returns a dictionary containing all data, with organism keys and ph values.
+```
+>>> from orgtools import org_ph
+>>> data_dict = org_ph.data()
+```
 
 ## org_temp module
 This module is used to get growth temperature for organisms.
@@ -250,4 +255,10 @@ A data flatfile is distributed with this package.
 >>> out_dict = org_temp.get_temp(['Saccharomyces cerevisiae', 'Escherichia coli'])
 >>> out_dict
 {'Escherichia coli': 36, 'Saccharomyces cerevisiae': 28}
+```
+
+**data()** returns a dictionary containing all data, with organism keys and temperature values.
+```
+>>> from orgtools import org_temp
+>>> data_dict = org_temp.data()
 ```
