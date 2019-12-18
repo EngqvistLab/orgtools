@@ -62,7 +62,7 @@ def get_taxid(organism_list):
 	assert resource_exists(__name__, NAMES_FILE), 'Error, could not find "names.dmp" in the filepath %s' % resource_filename(__name__, NAMES_FILE)
 
 	organism_set = set(helpfunctions._normalize_org_names(organism_list))
-	out_data = {key:None for key in organism_set}
+	out_data = {key:'None' for key in organism_set}
 
 	# Go through the file line by line and search for matches
 	with resource_stream(__name__, NAMES_FILE) as f:
@@ -89,7 +89,7 @@ def get_organism(taxid_list):
 
 
 	taxid_set = set([str(x) for x in taxid_list])
-	out_data = {key:None for key in taxid_set}
+	out_data = {key:'None' for key in taxid_set}
 
 	# Go through the file line by line and search for matches
 	with resource_stream(__name__, NAMES_FILE) as f:
@@ -126,6 +126,7 @@ class Lineage(object):
 		if self.input_type == 'organism':
 			self.organism_set = self.input_set
 			self.org_taxid_translation = get_taxid(self.organism_set)
+
 			self.taxid_org_translation = {v: k for k, v in self.org_taxid_translation.items()}
 			self.taxid_set = self.taxid_org_translation.keys()
 
@@ -138,7 +139,9 @@ class Lineage(object):
 		self.memoization_dict = {} # for caching lineage information to reduce computational burden
 
 		# get the lineages, both with taxid and organism keys
+		print('getting lineages')
 		self.taxid_lineage_data = self._get_all_lineages()
+		print('done')
 		self.organism_lineage_data = self._convert_lineage_identifier()
 
 
@@ -199,6 +202,9 @@ class Lineage(object):
 					line = filehandle.readline()
 
 					for i in range(4):
+						if line == b'': # seems I bump into the end of the file sometimes, workaround for that...
+							filehandle.seek(midpoint_bit-400, 0) # completely random the seek bits used here, may be a better setting
+							line = filehandle.readline()
 						node_id, parent_node_id, rank, *junk = line.split(b'|')
 						node_id = int(node_id.strip())
 						if taxid == node_id:
@@ -272,12 +278,21 @@ class Lineage(object):
 		for taxid in self.taxid_set:
 			taxid = str(taxid)
 
-			# get the nodes and ranks and save to data structure
-			parent_nodes, parent_ranks = self._get_single_taxid_lineage(taxid)
-			out_data[taxid] = {'nodes':parent_nodes, 'ranks':parent_ranks}
+			if taxid == 'None': # The input was none, this can happen when no taxid is found for an supposed organism
+				out_data[taxid] = {'nodes': ['None', 'None', 'None', 'None', 'None', 'None', 'None', 'None', 'None'],
+									 'ranks': ['root', 'no rank', 'superkingdom', 'phylum', 'class', 'order', 'family', 'genus', 'species'],
+									 'names': ['None', 'None', 'None', 'None', 'None', 'None', 'None', 'None', 'None']}
 
-			# update node set
-			all_taxid_nodes = all_taxid_nodes | set(parent_nodes)
+				# update node set
+				all_taxid_nodes = all_taxid_nodes | set(['None'])
+
+			else:
+				# get the nodes and ranks and save to data structure
+				parent_nodes, parent_ranks = self._get_single_taxid_lineage(taxid)
+				out_data[taxid] = {'nodes':parent_nodes, 'ranks':parent_ranks}
+
+				# update node set
+				all_taxid_nodes = all_taxid_nodes | set(parent_nodes)
 
 		# now get the names for all intermediate nodes
 		names = get_organism(all_taxid_nodes)
@@ -326,6 +341,10 @@ class Lineage(object):
 		Get the domain of life for a given identifier.
 		'''
 		lineage = self.lineage(identifier)
+
+		if lineage is None:
+			return 'Unknown'
+
 		for i in range(0, len(lineage['ranks'])):
 			if lineage['ranks'][i] == 'superkingdom':
 				break
