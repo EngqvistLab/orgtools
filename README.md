@@ -4,22 +4,31 @@ The aim of this package is to easily obtain information regarding growth tempera
 
 
 ## Installation
-Download repository and unzip (alternatively fork or clone), cd to the project base folder and execute the command below:
+Download repository and unzip (alternatively fork or clone).
 
+
+__If using an anaconda environment__ you may have to first locate the anaconda pip using whereis.
+```bash
+>>> whereis pip
 ```
-pip3 install -e .
+
+Locate the appropriate file path (the one that has anaconda and the correct environment in the filepath) and run the modified command. For example:
+
+```bash
+>>> /home/username/anaconda3/env_name/py37/bin/pip install -e .
+```
+
+__If _not_ using an anaconda environment__ simply install using pip:
+
+```bash
+>>> pip install -e .
 ```
 
 The library should now be available for loading in all your python scripts.
 
 
 ## Requirements
-* Unix system
-* wget
-* UnZip
-* python3
-* give some more details in this list......
-
+* Unix system (including wget and UnZip)
 
 # How to use the orgtools library
 
@@ -30,7 +39,7 @@ The topfunctions module leverages the other modules in this package to generate 
 ### Running the code
 The Properties object in topfunctions takes a list of uniprot identifiers as an input. The resulting data can be saved by using the flatfile() method of the object. This method takes the output file filepath as an input.
 
-```
+```python3
 >>> from orgtools import topfunctions
 >>> properties_object = topfunctions.Properties(identifier_data)
 >>> properties_object.flatfile(filepath)
@@ -45,7 +54,7 @@ If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. 
 ### Running the code
 **get_taxid()** takes a list of organism names as input and returns a dictionary with organism name keys and taxonomic identifier values.
 
-```
+```python3
 >>> from orgtools import org_tax
 >>> out_dict = org_tax.get_taxid(['Escherichia coli', 'Saccharomyces cerevisiae'])
 >>> out_dict
@@ -55,7 +64,7 @@ If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. 
 
 **get_organism()** takes a list of taxonomic identifiers as input and returns a dictionary with taxonomic identifier keys and organism name values.
 
-```
+```python3
 >>> from orgtools import org_tax
 >>> out_dict = org_tax.get_organism(['562', '4932'])
 >>> out_dict
@@ -65,14 +74,14 @@ If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. 
 
 **Lineage()** is a linage class that takes a list of organism names or taxids and retrieves the full taxonomic lineages for all of these. The input type must be specified in the "input_type" variable with either "organism" or "taxid" string values. The class then has methods to get the lineage information. There are significant computational speedups when submitting a list of all organisms at the same time. Memoization is used to cache intermediate lineage information. It is NOT a good idea to make a Lineage object for each organism that one wants to study.
 
-```
+```python3
 >>> from orgtools import org_tax
 >>> lineage_object = org_tax.Lineage(input_type='organism', input_list=['Escherichia coli', 'Saccharomyces cerevisiae'])
 ```
 
 **lineage()** is a lineage object method that takes an organism name or taxid as input and returns a dictionary with the full taxonomic lineages. Keys are "nodes", "ranks" and "names". Each of these hold dictionaries with the taxonomic lineage in the form of taxonomic identifiers, taxonomic rank and as names, respectively.
 
-```
+```python3
 >>> from orgtools import org_tax
 >>> lineage_object = org_tax.Lineage(input_type='organism', input_list=['Escherichia coli', 'Saccharomyces cerevisiae'])
 >>> lineage_object.lineage('Escherichia coli')
@@ -81,7 +90,7 @@ If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. 
 
 **domain()** is a lineage object method that takes an organism name or taxid as input and returns domain of life (superkingdom) of an organism as a string.
 
-```
+```python3
 >>> from orgtools import org_tax
 >>> lineage_object = org_tax.Lineage(input_type='organism', input_list=['Escherichia coli', 'Saccharomyces cerevisiae'])
 >>> lineage_object.domain('Escherichia coli')
@@ -90,7 +99,7 @@ If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. 
 
 **lineages()** is a lineage object method and returns a dictionary with the full taxonomic lineages. The organism names or taxids form the dictionary primary keys. Secondary keys are "nodes", "ranks" and "names". Each of these hold dictionaries with the taxonomic lineage in the form of taxonomic identifiers, taxonomic rank and as names, respectively.
 
-```
+```python3
 >>> from orgtools import org_tax
 >>> lineage_object = org_tax.Lineage(input_type='organism', input_list=['Escherichia coli', 'Saccharomyces cerevisiae'])
 >>> lineage_object.lineages()
@@ -99,7 +108,7 @@ If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. 
 
 **identifiers()** is a lineage object method that returns a set of all the input identifiers used.
 
-```
+```python3
 >>> from orgtools import org_tax
 >>> lineage_object = org_tax.Lineage(input_type='organism', input_list=['Escherichia coli', 'Saccharomyces cerevisiae'])
 >>> lineage_object.identifiers()
@@ -107,14 +116,14 @@ If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. 
 ```
 
 **Distance()** is a distance class that takes a lineage object as input and can compute taxonomic distances on these. The "score_type" variable can be specified as 'rank' or 'length' for different ways of computing the taxonomic distance, 'rank' is default.
-```
+```python3
 >>> from orgtools import org_tax
 >>> lineage_object = org_tax.Lineage('organism', ['Escherichia coli', 'Homo sapiens', 'Bacillus subtilis', 'Staphylococcus aureus'])
 >>> distance_object = org_tax.Distance(lineage_object)
 ```
 
 **all_distance_data()** is a distance object method that returns the taxonomic distance between all input organisms. The output is a nested dictionary with all organism pairs. The dictionary contains information regarding the taxonomic identifier for the node, the rank, the name and the distance score.
-```
+```python3
 >>> from orgtools import org_tax
 >>> lineage_object = org_tax.Lineage('organism', ['Escherichia coli', 'Homo sapiens', 'Bacillus subtilis', 'Staphylococcus aureus'])
 >>> distance_object = org_tax.Distance(lineage_object)
@@ -123,7 +132,7 @@ If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. 
 ```
 
 **dist()** is a distance object method that returns the taxonomic distance between two organisms specified in the method input. The output is a dictionary with the keys 'score' and 'pairs', where 'score' holds information regarding the texonomic distance and 'pairs' information regarding the two organisms.
-```
+```python3
 >>> from orgtools import org_tax
 >>> lineage_object = org_tax.Lineage('organism', ['Escherichia coli', 'Homo sapiens', 'Bacillus subtilis', 'Staphylococcus aureus'])
 >>> distance_object = org_tax.Distance(lineage_object)
@@ -132,7 +141,7 @@ If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. 
 ```
 
 **min_dist()** is a distance object method that returns the organism pairs with the smallest taxonomic distance. The output is a dictionary with the keys 'score' and 'pairs', where 'score' holds information regarding the taxonomic distance and 'pairs' information regarding the two organisms. If more than two organism pairs have the same score they are all returned as a list of organism pair tuples.
-```
+```python3
 >>> from orgtools import org_tax
 >>> lineage_object = org_tax.Lineage('organism', ['Escherichia coli', 'Homo sapiens', 'Bacillus subtilis', 'Staphylococcus aureus'])
 >>> distance_object = org_tax.Distance(lineage_object)
@@ -141,7 +150,7 @@ If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. 
 ```
 
 **max_dist()** is a distance object method that returns the organism pairs with the largest taxonomic distance. The output is a dictionary with the keys 'score' and 'pairs', where 'score' holds information regarding the taxonomic distance and 'pairs' information regarding the two organisms. If more than two organism pairs have the same score they are all returned as a list of organism pair tuples.
-```
+```python3
 >>> from orgtools import org_tax
 >>> lineage_object = org_tax.Lineage('organism', ['Escherichia coli', 'Homo sapiens', 'Bacillus subtilis', 'Staphylococcus aureus'])
 >>> distance_object = org_tax.Distance(lineage_object)
@@ -150,7 +159,7 @@ If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. 
 ```
 
 **closest_relative()** is a distance object method that returns the the closest relative of a specified organism. The output is a dictionary with the keys 'score' and 'pairs', where 'score' holds information regarding the taxonomic distance and 'pairs' information regarding the two organisms. If more than two organism pairs have the same score they are all returned as a list of organism pair tuples.
-```
+```python3
 >>> from orgtools import org_tax
 >>> lineage_object = org_tax.Lineage('organism', ['Escherichia coli', 'Homo sapiens', 'Bacillus subtilis', 'Staphylococcus aureus'])
 >>> distance_object = org_tax.Distance(lineage_object)
@@ -159,19 +168,13 @@ If not present the script downloads and unzips the "taxdmp.zip" file from NCBI. 
 ```
 
 **farthest_relative()** is a distance object method that returns the the farthest relative of a specified organism. The output is a dictionary with the keys 'score' and 'pairs', where 'score' holds information regarding the taxonomic distance and 'pairs' information regarding the two organisms. If more than two organism pairs have the same score they are all returned as a list of organism pair tuples.
-```
+```python3
 >>> from orgtools import org_tax
 >>> lineage_object = org_tax.Lineage('organism', ['Escherichia coli', 'Homo sapiens', 'Bacillus subtilis', 'Staphylococcus aureus'])
 >>> distance_object = org_tax.Distance(lineage_object)
 >>> distance_object.farthest_relative('Bacillus subtilis')
 {'score': 7, 'pairs': [('Bacillus subtilis', 'Homo sapiens')]}
 ```
-
-
-### TODO
-* Build unit tests
-* Implement error-handling. What happens if a bad name or taxid is given?
-
 
 ## uid_tax module
 The uid_tax module makes interconversions between UniProt identifiers and taxonomic identifiers. Can be used to find which organism (taxid) a specific protein comes from, or, alternatively, which UniProt identifiers are associated with a specific organism (taxid).
@@ -182,7 +185,7 @@ If not present this script will automatically downloads a UniProt flatfile (idma
 ### Running the code
 **get_uid()** takes a list of taxonomic identifiers as input and returns a dictionary with taxonomic identifier keys and a list of uniprot identifier values.
 
-```
+```python3
 >>> from orgtools import uid_tax
 >>> out_dict = uid_tax.get_uid(['654924', '345201'])
 >>> out_dict
@@ -191,17 +194,12 @@ If not present this script will automatically downloads a UniProt flatfile (idma
 
 **get_taxid()** takes a list of UniProt identifiers as input and returns a dictionary with uniprot identifier keys and taxonomic identifier values.
 
-```
+```python3
 >>> from orgtools import uid_tax
 >>> out_dict = uid_tax.get_taxid(['Q196Y3', 'Q6GZS7'])
 >>> out_dict
 {'Q6GZS7': '654924', 'Q196Y3': '345201'}
 ```
-
-### TODO
-This is currently pretty slow to run ~10 seconds. Consider a seqlite database solution to speed things up.
-
-
 
 ## uid_pfam module
 This module is used to get pfam domain information for uniprot identifiers.
@@ -213,7 +211,7 @@ https://www.uniprot.org/help/uploadlists
 ### Running the code
 **get_pfam()** takes a list of UniProt identifiers and returns a dictionary with UniProt identifier keys and domain values.
 If no identifiers are available the identifier holds the value None.
-```
+```python3
 >>> from orgtools import uid_pfam
 >>> out_dict = uid_pfam.get_pfam(['B7N6P4', 'Q6GZW5', 'A0A0W0VV04', 'P31946'])
 >>> out_dict
@@ -229,7 +227,7 @@ A data flatfile is distributed with this package.
 
 ### Running the code
 **get_ph()** takes a list of organism names and returns a dictionary with organism name keys and growth pH values. Organisms that have no growth pH in the dataset are returned with the value None. The data was extracted from the KOMODO database (http://komodo.modelseed.org/servlet/KomodoTomcatServerSideUtilitiesModelSeed?MediaList, https://doi.org/10.1038/ncomms9493).
-```
+```python3
 >>> from orgtools import org_ph
 >>> out_dict = org_ph.get_ph(['Saccharomyces cerevisiae', 'Escherichia coli'])
 >>> out_dict
@@ -237,7 +235,7 @@ A data flatfile is distributed with this package.
 ```
 
 **data()** returns a dictionary containing all data, with organism keys and ph values.
-```
+```python3
 >>> from orgtools import org_ph
 >>> data_dict = org_ph.data()
 ```
@@ -250,7 +248,7 @@ A data flatfile is distributed with this package.
 
 ### Running the code
 **get_temp()** takes a list of organism names and returns a dictionary with organism name keys and growth temperature values (degrees centigrade). Organisms that have no growth temperature in the dataset are returned with the value None. The data was obtained from a previous publication (https://doi.org/10.1186/s12866-018-1320-7) with an open dataset (https://doi.org/10.5281/zenodo.1175608).
-```
+```python3
 >>> from orgtools import org_temp
 >>> out_dict = org_temp.get_temp(['Saccharomyces cerevisiae', 'Escherichia coli'])
 >>> out_dict
@@ -258,7 +256,7 @@ A data flatfile is distributed with this package.
 ```
 
 **data()** returns a dictionary containing all data, with organism keys and temperature values.
-```
+```python3
 >>> from orgtools import org_temp
 >>> data_dict = org_temp.data()
 ```
