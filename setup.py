@@ -31,7 +31,7 @@ setup(
 	name='orgtools',    # This is the name of your PyPI-package.
 	description='A set of scripts to obtain biological descriptions for uniprot identifiers.',       #package description
     long_description=long_description,
-    version='0.1.0',                          # MAJOR.MINOR.PATCH
+    version='0.1.1',                          # MAJOR.MINOR.PATCH
 	author='Martin Engqvist',
 	author_email='martin_engqvist@hotmail.se',
 	url='https://github.com/EngqvistLab/orgtools',
