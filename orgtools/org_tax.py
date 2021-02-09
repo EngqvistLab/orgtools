@@ -2,7 +2,7 @@
 """
 Given an organism name the script tries to get a taxonomic identifier using the NCBI flatfiles.
 
-Copyright (C) 2017  Martin Engqvist Lab
+Copyright (C) 2017-2021  Martin Engqvist Lab
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -20,6 +20,7 @@ import itertools
 from orgtools import helpfunctions
 from pkg_resources import resource_stream, resource_filename, resource_exists
 import os
+from os.path import isfile, exists
 
 # Set up variables to keep track of the NCBI files
 NAMES_FILE = 'data/ncbi_data/names.dmp'
@@ -33,9 +34,14 @@ def _download_file():
 	Download the NCBI taxonomy files and unzip
 	'''
 	print('The NCBI taxonomy files required for this script to work are not present. Downloading...')
+	folder = resource_filename(__name__, 'data/ncbi_data/')
+	print(folder)
+	if not exists(folder):
+		os.makedirs(folder)
 
 	# download
 	mycmd = 'wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdmp.zip -O %s' % resource_filename(__name__, ZIPFILE)
+	print(mycmd)
 	os.system(mycmd)
 
 	# unzip
@@ -45,6 +51,7 @@ def _download_file():
 
 	# remove zip file
 	mycmd = 'rm %s' % resource_filename(__name__, ZIPFILE)
+	print(mycmd)
 	os.system(mycmd)
 
 

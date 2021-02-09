@@ -30,15 +30,15 @@ long_description = 'The aim of this package is to easily obtain information rega
 setup(
 	name='orgtools',    # This is the name of your PyPI-package.
 	description='A set of scripts to obtain biological descriptions for uniprot identifiers.',       #package description
-    long_description=long_description,
-    version='0.1.1',                          # MAJOR.MINOR.PATCH
+        long_description=long_description,
+        version='0.1.2',                          # MAJOR.MINOR.PATCH
 	author='Martin Engqvist',
 	author_email='martin_engqvist@hotmail.se',
 	url='https://github.com/EngqvistLab/orgtools',
-    packages=find_packages(exclude=['contrib', 'docs', 'tests*']), #find folders containing scripts, exclude irrelevant ones
-    install_requires=[],
-    include_package_data=True,
-    package_data={'orgtools':['data/ph_data/organism_ph.tsv', 'data/temperature_data/organism_temperature.tsv']},
+        packages=find_packages(exclude=['contrib', 'docs', 'tests*']), #find folders containing scripts, exclude irrelevant ones
+        install_requires=[],
+        include_package_data=True,
+        package_data={'orgtools':['data/ph_data/organism_ph.tsv', 'data/temperature_data/organism_temperature.tsv']},
 	license='GPLv3+',
 	classifiers=[
 	# How mature is this project? Common values are

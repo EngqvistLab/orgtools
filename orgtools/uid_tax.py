@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import gzip
 from pkg_resources import resource_stream, resource_filename, resource_exists
 import os
+from os.path import isfile, exists
 
 import time
 import requests
@@ -36,7 +37,13 @@ def _download_file():
 	Download the idmapping file
 	'''
 	print('The uniprot flatfile required for this script to work is not present. Downloading...')
+	folder = resource_filename(__name__, 'data/uniprot_data/')
+	print(folder)
+	if not exists(folder):
+		os.makedirs(folder)
+
 	mycmd = 'wget ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/idmapping.dat.2015_03.gz -O %s' % resource_filename(__name__, RAW_FILE)
+	print(mycmd)
 	os.system(mycmd)
 	print('Done')
 
@@ -60,6 +67,7 @@ def _filter_file():
 
 	# remove the zipfile
 	mycmd = 'rm %s' % resource_filename(__name__, RAW_FILE)
+	print(mycmd)
 	os.system(mycmd)
 
 	print('Done')
