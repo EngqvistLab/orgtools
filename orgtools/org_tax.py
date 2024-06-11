@@ -40,7 +40,7 @@ def _download_file():
 		os.makedirs(folder)
 
 	# download
-	mycmd = 'wget https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip -O %s' % resource_filename(__name__, ZIPFILE)
+	mycmd = 'wget ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip -O %s' % resource_filename(__name__, ZIPFILE)
 	print(mycmd)
 	os.system(mycmd)
 
